@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="fc-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3d8896"/>
+      <stop offset="55%" stop-color="#1f6675"/>
+      <stop offset="100%" stop-color="#0e3a44"/>
+    </linearGradient>
+  </defs>
+  <rect x="1" y="1" width="62" height="62" rx="14" ry="14" fill="url(#fc-bg)" stroke="rgba(126,200,211,0.42)" stroke-width="1"/>
+  <rect x="5" y="5" width="54" height="54" rx="11" ry="11" fill="none" stroke="rgba(255,255,255,0.16)" stroke-width="1"/>
+  <g stroke="#e6ecf0" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <circle cx="32" cy="6" r="1.4" fill="#e6ecf0" stroke="none"/>
+    <circle cx="32" cy="13" r="3.8"/>
+    <line x1="32" y1="17" x2="32" y2="54"/>
+    <line x1="22" y1="22" x2="42" y2="22"/>
+    <path d="M12 44 Q12 58 32 58 Q52 58 52 44"/>
+    <line x1="12" y1="44" x2="6.5" y2="38.5"/>
+    <line x1="12" y1="44" x2="17" y2="48.5"/>
+    <line x1="52" y1="44" x2="57.5" y2="38.5"/>
+    <line x1="52" y1="44" x2="47" y2="48.5"/>
+  </g>
+</svg>
