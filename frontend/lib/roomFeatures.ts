@@ -1,72 +1,75 @@
 import type { LucideIcon } from "lucide-react";
 import {
-    Bed,
-    BedDouble,
-    Bath,
-    Tv,
-    Wind,
-    Wifi,
-    Refrigerator,
-    Coffee,
-    Sofa,
-    SquareDashed,
-    Wine,
-    DoorOpen,
-    Users,
+    Bed, BedDouble, Sofa,
+    Tv, Wind, Refrigerator, Lock, Coffee, Sparkles,
+    Bath, Droplets,
+    SquareDashed, Shirt, DoorOpen,
 } from "lucide-react";
-import type { RoomType } from "@/types";
+import type { RoomFeature, RoomFeatureType, RoomType } from "@/types";
 
-export interface RoomFeature {
+export interface RoomFeatureDisplay {
     icon: LucideIcon;
     label: string;
+    quantity: number;
+    notes: string | null;
+    id: number;
+    type: RoomFeatureType;
 }
 
-// Amenities defined per room type. Order matters — it's the order we render
-// them in. Each tier inherits the smaller-tier amenities and layers on more.
-const SINGLE: RoomFeature[] = [
-    { icon: Bed,          label: "1 single bed"   },
-    { icon: Users,        label: "Sleeps 1"       },
-    { icon: Bath,         label: "1 bathroom"     },
-    { icon: Tv,           label: "Smart TV"       },
-    { icon: Wind,         label: "Air conditioning" },
-    { icon: Wifi,         label: "Free Wi-Fi"     },
-    { icon: Refrigerator, label: "Mini fridge"    },
-    { icon: Coffee,       label: "Coffee kit"     },
-];
+// Per-feature icon + display label (English; the i18n layer translates labels
+// at render time). The backend is the source of truth for what each room
+// *actually* contains; this map only chooses how to render each enum value.
+const FEATURE_META: Record<RoomFeatureType, { icon: LucideIcon; label: string }> = {
+    SingleBed:      { icon: Bed,          label: "Single bed"      },
+    DoubleBed:      { icon: BedDouble,    label: "Double bed"      },
+    QueenBed:       { icon: BedDouble,    label: "Queen bed"       },
+    KingBed:        { icon: BedDouble,    label: "King bed"        },
+    SofaBed:        { icon: Sofa,         label: "Sofa bed"        },
 
-const DOUBLE: RoomFeature[] = [
-    { icon: BedDouble,    label: "2 double beds"  },
-    { icon: Users,        label: "Sleeps 2 – 4"   },
-    { icon: Bath,         label: "1 bathroom"     },
-    { icon: Tv,           label: "Smart TV"       },
-    { icon: Wind,         label: "Air conditioning" },
-    { icon: Wifi,         label: "Free Wi-Fi"     },
-    { icon: Refrigerator, label: "Mini fridge"    },
-    { icon: Coffee,       label: "Coffee kit"     },
-    { icon: SquareDashed, label: "Work desk"      },
-];
+    Tv:             { icon: Tv,           label: "TV"              },
+    AirConditioner: { icon: Wind,         label: "Air conditioner" },
+    MiniFridge:     { icon: Refrigerator, label: "Mini fridge"     },
+    Safe:           { icon: Lock,         label: "Safe"            },
+    Hairdryer:      { icon: Sparkles,     label: "Hairdryer"       },
+    Kettle:         { icon: Coffee,       label: "Kettle"          },
 
-const SUITE: RoomFeature[] = [
-    { icon: BedDouble,    label: "2 king beds"    },
-    { icon: Sofa,         label: "Sofa bed"       },
-    { icon: Users,        label: "Sleeps up to 5" },
-    { icon: Bath,         label: "2 bathrooms"    },
-    { icon: Tv,           label: "2 smart TVs"    },
-    { icon: Wind,         label: "Air conditioning" },
-    { icon: Wifi,         label: "Free Wi-Fi"     },
-    { icon: Wine,         label: "Mini bar"       },
-    { icon: Coffee,       label: "Coffee kit"     },
-    { icon: DoorOpen,     label: "Balcony"        },
-];
+    Bathtub:        { icon: Bath,         label: "Bathtub"         },
+    Shower:         { icon: Droplets,     label: "Shower"          },
 
-const FEATURES: Record<RoomType, RoomFeature[]> = {
-    Single: SINGLE,
-    Double: DOUBLE,
-    Suite:  SUITE,
+    Desk:           { icon: SquareDashed, label: "Desk"            },
+    Sofa:           { icon: Sofa,         label: "Sofa"            },
+    Wardrobe:       { icon: Shirt,        label: "Wardrobe"        },
+    Balcony:        { icon: DoorOpen,     label: "Balcony"         },
 };
 
-export function getRoomFeatures(type: RoomType): RoomFeature[] {
-    return FEATURES[type] ?? [];
+/**
+ * Decorate the live backend features for a room with the icon + label needed
+ * to render them. Sorted by label so the order is stable per render.
+ */
+export function decorateRoomFeatures(features: RoomFeature[]): RoomFeatureDisplay[] {
+    return features
+        .map(f => {
+            const meta = FEATURE_META[f.type] ?? { icon: SquareDashed, label: f.type };
+            return {
+                id: f.id,
+                type: f.type,
+                quantity: f.quantity,
+                notes: f.notes,
+                icon: meta.icon,
+                label: meta.label,
+            };
+        })
+        .sort((a, b) => a.label.localeCompare(b.label));
+}
+
+/** Icon for a given feature type, used by the admin editor's dropdown. */
+export function getFeatureIcon(type: RoomFeatureType): LucideIcon {
+    return FEATURE_META[type]?.icon ?? SquareDashed;
+}
+
+/** English label for a given feature type, used as an i18n key. */
+export function getFeatureLabel(type: RoomFeatureType): string {
+    return FEATURE_META[type]?.label ?? type;
 }
 
 // Short tagline shown next to the type pill in compact contexts.

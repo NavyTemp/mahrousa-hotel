@@ -14,7 +14,17 @@ namespace Hotelmanagment.Application.Services
         public async Task<List<RoomDto>> GetAllRoomsAsync()
         {
             return await _db.Rooms
-           .Select(r => new RoomDto(r.Id, r.RoomNumber, r.Type.ToString(), r.Status.ToString(), r.PricePerNight))
+           .OrderBy(r => r.RoomNumber)
+           .Select(r => new RoomDto(
+               r.Id,
+               r.RoomNumber,
+               r.Type.ToString(),
+               r.Status.ToString(),
+               r.PricePerNight,
+               r.Features
+                .OrderBy(f => f.Type)
+                .Select(f => new RoomFeatureDto(f.Id, f.Type.ToString(), f.Quantity, f.Notes))
+                .ToList()))
            .ToListAsync();
         }
 

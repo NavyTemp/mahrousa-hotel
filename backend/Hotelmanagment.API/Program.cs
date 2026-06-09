@@ -17,6 +17,7 @@ builder.Services.AddDbContext<HotelDbContext>(options =>
 // ── Application services ──────────────────────────────────────────────────
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
+builder.Services.AddScoped<IRoomFeatureService, RoomFeatureService>();
 builder.Services.AddScoped<IHallService, HallService>();
 builder.Services.AddScoped<IHallBookingService, HallBookingService>();
 builder.Services.AddScoped<IReservationService, ReservationService>();

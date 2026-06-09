@@ -1,5 +1,6 @@
 ﻿using HotelManagement.Domain.Entities;
 using Hotelmanagment.Domain.Entities;
+using Hotelmanagment.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace Hotelmanagment.Infrastructure.Persistence
         public DbSet<Staff> Staff => Set<Staff>();
         public DbSet<StaffRoleAssignment> StaffRoles => Set<StaffRoleAssignment>();
         public DbSet<Room> Rooms => Set<Room>();
+        public DbSet<RoomFeature> RoomFeatures => Set<RoomFeature>();
         public DbSet<Hall> Halls => Set<Hall>();
         public DbSet<HallBooking> HallBookings => Set<HallBooking>();
         public DbSet<Guest> Guests => Set<Guest>();
@@ -70,6 +72,23 @@ namespace Hotelmanagment.Infrastructure.Persistence
                 e.Property(r => r.Type).HasConversion<string>().HasMaxLength(20);
                 e.Property(r => r.Status).HasConversion<string>().HasMaxLength(20);
                 e.Property(r => r.PricePerNight).HasColumnType("numeric(10,2)");
+            });
+
+            modelBuilder.Entity<RoomFeature>(e =>
+            {
+                e.HasKey(f => f.Id);
+                e.Property(f => f.Id).UseIdentityByDefaultColumn();
+                e.Property(f => f.Type).HasConversion<string>().HasMaxLength(30);
+                e.Property(f => f.Notes).HasMaxLength(200);
+
+                e.HasOne(f => f.Room)
+                 .WithMany(r => r.Features)
+                 .HasForeignKey(f => f.RoomId)
+                 .OnDelete(DeleteBehavior.Cascade);
+
+                // One row per (room, feature type): bump Quantity instead of
+                // inserting a duplicate. Enforced both in the service and here.
+                e.HasIndex(f => new { f.RoomId, f.Type }).IsUnique();
             });
 
             modelBuilder.Entity<Hall>(e =>

@@ -12,6 +12,7 @@ public static class SeedData
     {
         SeedStaff(db);
         SeedRooms(db);
+        SeedRoomFeatures(db);
         SeedHalls(db);
         SeedInventory(db);
     }
@@ -50,6 +51,74 @@ public static class SeedData
             new Room { RoomNumber = "202", Type = RoomType.Double, PricePerNight = 90m, Status = RoomStatus.Available },
             new Room { RoomNumber = "301", Type = RoomType.Suite, PricePerNight = 180m, Status = RoomStatus.Available }
         );
+        db.SaveChanges();
+    }
+
+    private static void SeedRoomFeatures(HotelDbContext db)
+    {
+        // Per-RoomType defaults so seeded rooms already report their contents
+        // (beds, TV, AC, etc.) without anyone having to add features manually.
+        // Idempotent: only adds features for rooms that currently have none,
+        // so re-running the seed on existing data does not duplicate rows or
+        // overwrite anything housekeeping may have customised.
+        var defaults = new Dictionary<RoomType, (RoomFeatureType Type, int Quantity)[]>
+        {
+            [RoomType.Single] = new[]
+            {
+                (RoomFeatureType.SingleBed,      1),
+                (RoomFeatureType.Tv,             1),
+                (RoomFeatureType.AirConditioner, 1),
+                (RoomFeatureType.Shower,         1),
+                (RoomFeatureType.Wardrobe,       1),
+            },
+            [RoomType.Double] = new[]
+            {
+                (RoomFeatureType.QueenBed,       1),
+                (RoomFeatureType.Tv,             1),
+                (RoomFeatureType.AirConditioner, 1),
+                (RoomFeatureType.Shower,         1),
+                (RoomFeatureType.Wardrobe,       1),
+                (RoomFeatureType.Desk,           1),
+                (RoomFeatureType.MiniFridge,     1),
+            },
+            [RoomType.Suite] = new[]
+            {
+                (RoomFeatureType.KingBed,        1),
+                (RoomFeatureType.SofaBed,        1),
+                (RoomFeatureType.Tv,             2),
+                (RoomFeatureType.AirConditioner, 1),
+                (RoomFeatureType.Bathtub,        1),
+                (RoomFeatureType.Shower,         1),
+                (RoomFeatureType.MiniFridge,     1),
+                (RoomFeatureType.Safe,           1),
+                (RoomFeatureType.Desk,           1),
+                (RoomFeatureType.Sofa,           1),
+                (RoomFeatureType.Balcony,        1),
+                (RoomFeatureType.Wardrobe,       1),
+            },
+        };
+
+        var roomsWithoutFeatures = db.Rooms
+            .Where(r => !r.Features.Any())
+            .ToList();
+
+        if (roomsWithoutFeatures.Count == 0) return;
+
+        foreach (var room in roomsWithoutFeatures)
+        {
+            if (!defaults.TryGetValue(room.Type, out var defaultsForType)) continue;
+
+            foreach (var (type, qty) in defaultsForType)
+            {
+                db.RoomFeatures.Add(new RoomFeature
+                {
+                    RoomId = room.Id,
+                    Type = type,
+                    Quantity = qty,
+                });
+            }
+        }
+
         db.SaveChanges();
     }
 

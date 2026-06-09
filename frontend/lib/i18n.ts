@@ -487,6 +487,42 @@ const AR: Record<string, string> = {
   "Enable": "تفعيل",
   "No staff found": "لا يوجد موظفون",
 
+  // ── Room contents editor (admin) ──
+  // (Some shared strings like "Close", "Add", "Remove", "Room {n}",
+  //  "Quantity must be at least 1.", "Sofa bed", "Mini fridge", "Balcony"
+  //  are defined elsewhere in this file and reused here.)
+  "Edit contents": "تعديل المحتويات",
+  "Current contents": "المحتويات الحالية",
+  "Refreshing…": "جارٍ التحديث…",
+  "This room has no recorded contents yet. Add one below.": "لا توجد محتويات مسجّلة لهذه الغرفة بعد. أضف واحدة أدناه.",
+  "Feature": "العنصر",
+  "Qty": "الكمية",
+  "Notes (optional)": "ملاحظات (اختياري)",
+  "e.g. 55-inch, facing courtyard": "مثال: 55 بوصة، مطلّة على الفناء",
+  "Update": "تحديث",
+  "already added": "تمت إضافته",
+  "Updated {label} for room {n}.": "تم تحديث {label} للغرفة {n}.",
+  "Added {label} to room {n}.": "تمت إضافة {label} للغرفة {n}.",
+  "Removed {label} from room {n}.": "تمت إزالة {label} من الغرفة {n}.",
+  "Failed to save feature.": "فشل حفظ العنصر.",
+  "Failed to remove feature.": "فشل إزالة العنصر.",
+
+  // Feature type labels
+  "Single bed":      "سرير فردي",
+  "Double bed":      "سرير مزدوج",
+  "Queen bed":       "سرير كوين",
+  "King bed":        "سرير كينغ",
+  "TV":              "تلفاز",
+  "Air conditioner": "مكيّف هواء",
+  "Safe":            "خزنة",
+  "Hairdryer":       "مجفّف شعر",
+  "Kettle":          "غلّاية",
+  "Bathtub":         "حوض استحمام",
+  "Shower":          "دش",
+  "Desk":            "مكتب",
+  "Sofa":            "أريكة",
+  "Wardrobe":        "خزانة ملابس",
+
   // ── Not found ──
   "Page not found": "الصفحة غير موجودة",
   "This page doesn't exist or you don't have access.": "هذه الصفحة غير موجودة أو ليس لديك صلاحية الوصول.",

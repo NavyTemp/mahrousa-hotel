@@ -1,5 +1,5 @@
 import type {
-    Room, Reservation, Folio,
+    Room, RoomFeature, RoomFeatureType, Reservation, Folio,
     InventoryItem, InventoryRestockLog, InventoryUsageLog,
     Staff, StaffRole, DashboardSnapshot,
     Hall, HallBooking,
@@ -66,6 +66,27 @@ export const roomsApi = {
         request<void>(`/api/rooms/${id}/status`, {
             method: "PATCH",
             body: JSON.stringify({ status }),
+        }),
+};
+
+// Per-room contents (beds, TV, fridge, AC, etc.). Backend enforces unique
+// (RoomId, Type) — `upsert` will update an existing row instead of creating a
+// duplicate.
+export const roomFeaturesApi = {
+    getByRoom: (roomId: number) =>
+        request<RoomFeature[]>(`/api/rooms/${roomId}/features`),
+    upsert: (roomId: number, data: {
+        type: RoomFeatureType;
+        quantity: number;
+        notes?: string | null;
+    }) =>
+        request<RoomFeature>(`/api/rooms/${roomId}/features`, {
+            method: "POST",
+            body: JSON.stringify(data),
+        }),
+    remove: (roomId: number, featureId: number) =>
+        request<void>(`/api/rooms/${roomId}/features/${featureId}`, {
+            method: "DELETE",
         }),
 };
 

@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState, FormEvent } from "react";
 import Link from "next/link";
 import { inventoryApi, roomsApi } from "@/lib/api";
-import { getRoomFeatures, getRoomTypeBlurb } from "@/lib/roomFeatures";
+import { decorateRoomFeatures, getRoomTypeBlurb } from "@/lib/roomFeatures";
 import type { InventoryItem, InventoryCategory, Room } from "@/types";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { CardHeader } from "@/components/ui/Card";
@@ -930,7 +930,7 @@ function ItemPicker({ groups, value, onChange, error, disabled }: ItemPickerProp
 
 function RoomContentsPanel({ room }: { room: Room }) {
   const { t } = useI18n();
-  const features = getRoomFeatures(room.type);
+  const features = decorateRoomFeatures(room.features ?? []);
   if (features.length === 0) return null;
 
   return (
@@ -994,9 +994,9 @@ function RoomContentsPanel({ room }: { room: Room }) {
         gap: "6px",
         padding: "10px 12px",
       }}>
-        {features.map((f, i) => (
+        {features.map(f => (
           <div
-            key={i}
+            key={f.id}
             style={{
               display: "flex",
               alignItems: "center",
@@ -1029,7 +1029,7 @@ function RoomContentsPanel({ room }: { room: Room }) {
               textOverflow: "ellipsis",
               whiteSpace: "nowrap",
             }}>
-              {t(f.label)}
+              {f.quantity > 1 ? `${f.quantity}× ${t(f.label)}` : t(f.label)}
             </span>
           </div>
         ))}

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Hotelmanagment.Application.DTOs.Rooms
 {
@@ -9,6 +7,9 @@ namespace Hotelmanagment.Application.DTOs.Rooms
       string RoomNumber,
       string Type,
       string Status,
-      decimal PricePerNight
+      decimal PricePerNight,
+      // What is physically in the room (beds, TV, fridge, AC, ...). Empty list
+      // when the room has no recorded features yet.
+      List<RoomFeatureDto> Features
   );
 }

@@ -23,12 +23,35 @@ export interface AuthUser {
 export type RoomStatus = "Available" | "Occupied" | "Dirty" | "Maintenance";
 export type RoomType = "Single" | "Double" | "Suite";
 
+// Mirrors backend Hotelmanagment.Domain.Enums.RoomFeatureType. Append-only —
+// removing or renaming a value would break older rows stored as text.
+export type RoomFeatureType =
+    | "SingleBed" | "DoubleBed" | "QueenBed" | "KingBed" | "SofaBed"
+    | "Tv" | "AirConditioner" | "MiniFridge" | "Safe" | "Hairdryer" | "Kettle"
+    | "Bathtub" | "Shower"
+    | "Desk" | "Sofa" | "Wardrobe" | "Balcony";
+
+export const ALL_ROOM_FEATURE_TYPES: RoomFeatureType[] = [
+    "SingleBed", "DoubleBed", "QueenBed", "KingBed", "SofaBed",
+    "Tv", "AirConditioner", "MiniFridge", "Safe", "Hairdryer", "Kettle",
+    "Bathtub", "Shower",
+    "Desk", "Sofa", "Wardrobe", "Balcony",
+];
+
+export interface RoomFeature {
+    id: number;
+    type: RoomFeatureType;
+    quantity: number;
+    notes: string | null;
+}
+
 export interface Room {
     id: number;
     roomNumber: string;
     type: RoomType;
     status: RoomStatus;
     pricePerNight: number;
+    features: RoomFeature[];
 }
 
 export type ReservationStatus = "Pending" | "CheckedIn" | "CheckedOut" | "Cancelled";
