@@ -147,6 +147,9 @@ coverage*.json
 coverage*.xml
 coverage*.info
 
+# Test runner output (xunit + coverlet)
+TestResults/
+
 # Visual Studio code coverage results
 *.coverage
 *.coveragexml

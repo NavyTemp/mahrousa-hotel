@@ -3,4 +3,6 @@
   <Project Path="Hotelmanagment.Application/Hotelmanagment.Application.csproj" />
   <Project Path="Hotelmanagment.Domain/Hotelmanagment.Domain.csproj" />
   <Project Path="Hotelmanagment.Infrastructure/Hotelmanagment.Infrastructure.csproj" />
+  <Project Path="Hotelmanagment.UnitTests/Hotelmanagment.UnitTests.csproj" />
+  <Project Path="Hotelmanagment.IntegrationTests/Hotelmanagment.IntegrationTests.csproj" />
 </Solution>
