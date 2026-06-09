@@ -10,6 +10,14 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <!--
+      Pin EF Core 10.0.7 explicitly so it wins over the older 10.0.4 that
+      Npgsql.EntityFrameworkCore.PostgreSQL 10.0.1 pulls in transitively.
+      Without these the build emits MSB3277 and the runtime would load 10.0.4,
+      which can fail with MethodNotFound on any 10.0.7-only API surface.
+    -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.7" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.7" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="10.0.7" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.7" />
